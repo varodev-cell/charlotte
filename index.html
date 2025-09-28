@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Château Bakery — Головна</title>
+  <meta name="description" content="Чистий статичний шаблон сайту пекарні у стилі Charlotte: світла шапка, відео‑герой, розділи про нас, продукція, новини, карта, контакти. Без копіювання контенту.">
+  <style>
+    :root{
+      --bg:#faf7f2;          /* тло */
+      --paper:#ffffff;       /* блоки */
+      --ink:#2b2b2b;         /* текст */
+      --muted:#7a6f65;       /* другорядний текст */
+      --sepia:#8a5a2b;       /* акцент (коричневий) */
+      --sepia-2:#b07b42;     /* світліший акцент */
+      --line:#e9e1d8;        /* лінії */
+      --shadow:0 12px 30px rgba(0,0,0,.06)
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family: ui-serif, Georgia, "Times New Roman", Times, serif;background:var(--bg);color:var(--ink);}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+
+    /* ===== header ===== */
+    .topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+    .nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 20px}
+    .brand{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px}
+    .brand .emblem{width:56px;height:40px;border:1px solid var(--line);border-radius:4px;background:repeating-linear-gradient( 135deg, #dcc9b3 0 12px, #f2e5d8 12px 24px );box-shadow:inset 0 0 0 2px #fff}
+    .brand .title{font-weight:700;letter-spacing:2px;font-size:20px}
+    .menu{display:flex;gap:18px}
+    .menu a{padding:8px 6px;border-bottom:2px solid transparent}
+    .menu a:hover{border-color:var(--sepia)}
+
+    .hero{position:relative;isolation:isolate}
+    .hero video{width:100%;height:60vh;min-height:420px;object-fit:cover;display:block;filter:contrast(.98) saturate(.9)}
+    .hero .overlay{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient( 1200px 300px at 50% 0%, rgba(255,255,255,.35), transparent 60% )}
+    .hero .caption{backdrop-filter:blur(2px);color:#fff;text-align:center;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+    .hero .caption h1{margin:0 0 8px;font-size:40px}
+    .hero .caption p{margin:0;font-size:18px}
+    .hero .pause{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.9);box-shadow:var(--shadow);cursor:pointer}
+
+    /* ===== section shells ===== */
+    .wrap{max-width:1200px;margin:0 auto;padding:32px 20px}
+    .section-title{font-size:28px;text-align:center;margin:0 0 8px}
+    .section-sub{color:var(--muted);text-align:center;margin:0 0 22px}
+
+    /* ===== Our bakery (about) ===== */
+    .about{display:grid;grid-template-columns: 1.2fr 1fr;gap:28px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px;box-shadow:var(--shadow)}
+    .about .logo{aspect-ratio:4/3;background:linear-gradient( to bottom, #e8dac8, #f7efe7 );display:grid;place-items:center;border:1px solid var(--line);border-radius:6px}
+    .about .logo span{font-size:40px;color:var(--sepia);letter-spacing:8px}
+    .about h3{margin:0 0 10px}
+    .about p{margin:0 0 8px;color:#4b423b;line-height:1.55}
+
+    /* ===== Products grid (posters look) ===== */
+    .posters{display:grid;grid-template-columns: repeat(4, 1fr);gap:22px}
+    @media (max-width:1100px){.posters{grid-template-columns: repeat(3, 1fr)}}
+    @media (max-width:800px){.posters{grid-template-columns: repeat(2, 1fr)}}
+    @media (max-width:520px){.posters{grid-template-columns: 1fr}}
+    .poster{background:#fff;border:1px solid #cfc4b8;border-radius:6px;box-shadow:0 6px 16px rgba(0,0,0,.05);overflow:hidden}
+    .poster .ph{aspect-ratio:3/4;background:linear-gradient(135deg,#eee4da,#fff);display:grid;place-items:center;color:#9b7c59;font-weight:700}
+    .poster .cap{padding:10px 14px;text-align:center}
+
+    /* ===== Testimonials ===== */
+    .testi{position:relative;border:1px solid var(--line);border-radius:10px;background:var(--paper);overflow:hidden}
+    .testi .bg{height:260px;background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260"><rect width="100%" height="100%" fill="%23f0e6dc"/></svg>') center/cover}
+    .testi .content{max-width:820px;margin:-80px auto 0;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:10px;padding:22px 26px;box-shadow:var(--shadow);text-align:center}
+    .testi .avatar{width:64px;height:64px;border-radius:50%;border:3px solid #fff;background:linear-gradient(135deg,#e2d3c2,#fff);margin:-54px auto 12px}
+    .dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
+    .dots button{width:8px;height:8px;border-radius:50%;border:1px solid #bfa48a;background:#fff;cursor:pointer}
+    .dots button.active{background:#bfa48a}
+
+    /* ===== News cards ===== */
+    .news{display:grid;grid-template-columns: repeat(3, 1fr);gap:22px}
+    @media (max-width:900px){.news{grid-template-columns: repeat(2, 1fr)}}
+    @media (max-width:620px){.news{grid-template-columns: 1fr}}
+    .card{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
+    .card .ph{height:200px;background:linear-gradient(135deg,#efe1d2,#fff)}
+    .card .body{padding:14px}
+
+    /* ===== Map ===== */
+    .mapwrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+    .map{width:100%;height:420px;display:block;border:0;filter:saturate(.9) contrast(1)}
+
+    /* ===== Footer ===== */
+    .footer{background:#2e2b28;color:#f1eae2}
+    .footer .grid{max-width:1200px;margin:0 auto;padding:26px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .footer h4{margin:0 0 8px}
+    .footer .muted{opacity:.8}
+    .social{display:flex;gap:10px;margin-top:8px}
+    .social a{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#f1eae2;color:#2e2b28;font-weight:700}
+    .copyright{border-top:1px solid #4a443e;opacity:.8;text-align:center;padding:12px 20px}
+
+    .up{position:fixed;right:16px;bottom:16px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow)}
+  </style>
+</head>
+<body>
+  <!-- ===== Шапка ===== -->
+  <header class="topbar">
+    <nav class="nav">
+      <div class="brand">
+        <div class="emblem" aria-hidden="true"></div>
+        <div class="title">CHÂTEAU</div>
+      </div>
+      <div class="menu">
+        <a href="#home">Головна</a>
+        <a href="#bakery">Наша пекарня</a>
+        <a href="#geo">Ми в Україні</a>
+        <a href="#products">Наша продукція</a>
+        <a href="#news">Новини</a>
+        <a href="#contacts">Контакти</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== ГЕРОЙ з відео ===== -->
+  <section id="home" class="hero">
+    <video id="heroVideo" autoplay muted loop playsinline poster="" aria-label="Відео про випічку">
+      <!-- Покладіть свій файл у ./media/hero.mp4 -->
+      <source src="media/hero.mp4" type="video/mp4"/>
+    </video>
+    <div class="overlay">
+      <div class="caption">
+        <h1>Натуральні десерти щодня</h1>
+        <p>Свіжа випічка • Сучасне виробництво • Сертифікована якість</p>
+      </div>
+    </div>
+    <button class="pause" id="toggleVideo" title="Пауза/Відтворити">❚❚</button>
+  </section>
+
+  <main class="wrap">
+    <!-- ===== Наша пекарня (about) ===== -->
+    <section id="bakery" class="about">
+      <div class="logo"><span>Château</span></div>
+      <div>
+        <h3>Наша пекарня</h3>
+        <p><strong>Натуральність та якість</strong> — наш головний принцип. У рецептах лише перевірена сировина та класичні технології, адаптовані до сучасного обладнання.</p>
+        <p>Ми готуємо десерти для роздрібних клієнтів і партнерів HoReCa. Працюємо прозоро, маємо всю необхідну документацію та впроваджуємо контроль якості на кожному етапі.</p>
+      </div>
+    </section>
+
+    <!-- ===== Ми в Україні (мапа‑ілюстрація) ===== -->
+    <section id="geo" style="padding-top:34px">
+      <h2 class="section-title">Ми в Україні</h2>
+      <p class="section-sub">Наші представництва</p>
+      <div style="aspect-ratio:16/9;background:linear-gradient(180deg,#f2e8dc,#fff);border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;box-shadow:var(--shadow)">
+        <div style="text-align:center;color:#8b6a47">
+          <div style="font-size:80px;opacity:.4">Україна</div>
+          <div style="margin-top:-20px">— тут буде ваша карта з точками —</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Наша продукція (постери) ===== -->
+    <section id="products" style="padding-top:34px">
+      <h2 class="section-title">Наша продукція</h2>
+      <p class="section-sub">Спробуйте — і переконаєтесь</p>
+      <div class="posters">
+        <!-- 8 прикладів (замініть своїми зображеннями) -->
+        <article class="poster"><div class="ph">Рулет «Вишневий»</div><div class="cap">Легкий бісквіт, ягідна начинка</div></article>
+        <article class="poster"><div class="ph">Пляцок «Мурашник»</div><div class="cap">Класичний смак дитинства</div></article>
+        <article class="poster"><div class="ph">Торт «Мікадо»</div><div class="cap">Тонкі коржі, крем</div></article>
+        <article class="poster"><div class="ph">Десерт горіховий</div><div class="cap">Горіхи та мед</div></article>
+        <article class="poster"><div class="ph">Кекси асорті</div><div class="cap">Ваніль / шоколад</div></article>
+        <article class="poster"><div class="ph">Еклери</div><div class="cap">Заварний крем</div></article>
+        <article class="poster"><div class="ph">Пісочне печиво</div><div class="cap">Справжнє масло</div></article>
+        <article class="poster"><div class="ph">Маффіни</div><div class="cap">Шоколадні крихти</div></article>
+      </div>
+    </section>
+
+    <!-- ===== Відгуки ===== -->
+    <section style="padding-top:34px">
+      <div class="testi">
+        <div class="bg" aria-hidden="true"></div>
+        <div class="content" id="testi">
+          <div class="avatar"></div>
+          <h3 style="margin:0 0 6px">Відгуки клієнтів</h3>
+          <p id="quote" style="margin:0 0 8px">Після першого шматочка нашої випічки кожне сімейне свято стає ще теплішим. Дякуємо за якісний продукт!</p>
+          <div class="section-sub" id="author">Марія, Київ</div>
+          <div class="dots" id="dots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Новини ===== -->
+    <section id="news" style="padding-top:34px">
+      <h2 class="section-title">Новини</h2>
+      <p class="section-sub">Наші статті</p>
+      <div class="news">
+        <article class="card"><div class="ph"></div><div class="body"><strong>Топ‑5 фаворитів від Château</strong><p class="section-sub" style="text-align:left">Добірка сезонних десертів</p></div></article>
+        <article class="card"><div class="ph"></div><div class="body"><strong>Кулінарний цех: закулісся</strong><p class="section-sub" style="text-align:left">Короткий репортаж з виробництва</p></div></article>
+        <article class="card"><div class="ph"></div><div class="body"><strong>Чому саме натуральні інгредієнти?</strong><p class="section-sub" style="text-align:left">Пояснюємо наш підхід</p></div></article>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Карта (встав свій iframe Google Maps) ===== -->
+  <section class="mapwrap" id="contacts">
+    <!-- Замініть src на вашу карту Google Maps; зараз це заглушка openstreetmap static → порожній data‑URI  -->
+    <iframe class="map" title="Карта" srcdoc="<html><body style='margin:0'><div style='width:100%;height:100%;display:grid;place-items:center;font-family:Georgia,serif;background:#f5eee6;color:#8b6a47'>Тут буде карта Google Maps (вставте ваш iframe)</div></body></html>"></iframe>
+  </section>
+
+  <!-- ===== Підвал ===== -->
+  <footer class="footer">
+    <div class="grid">
+      <div>
+        <h4>Режим роботи</h4>
+        <div class="muted">Понеділок — Неділя</div>
+        <div>08:30 — 17:00</div>
+        <div class="social">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">in</a>
+          <a href="#" aria-label="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <h4>Контактна інформація</h4>
+        <div class="muted">+38 (000) 000‑00‑00</div>
+        <div class="muted">Україна, ваша адреса</div>
+        <div class="muted">info@chateau-bakery.example</div>
+        <div class="muted">https://your-domain.example</div>
+      </div>
+    </div>
+    <div class="copyright">© 2025 Château Bakery — чистий шаблон (без копіювання контенту)</div>
+  </footer>
+
+  <a class="up" href="#home" title="Догори">↑</a>
+
+  <script>
+    // Перемикач відео
+    const heroVideo = document.getElementById('heroVideo');
+    const toggleVideo = document.getElementById('toggleVideo');
+    function syncIcon(){ toggleVideo.textContent = heroVideo.paused ? '▶' : '❚❚' }
+    toggleVideo.addEventListener('click',()=>{ heroVideo.paused? heroVideo.play(): heroVideo.pause(); syncIcon(); });
+    heroVideo.addEventListener('play', syncIcon); heroVideo.addEventListener('pause', syncIcon);
+
+    // Простий слайдер відгуків (без залежностей)
+    const quotes = [
+      { q:"Після першого шматочка нашої випічки кожне свято стає ще теплішим. Дякуємо за якість!", a:"Марія, Київ" },
+      { q:"Стабільна якість і пунктуальні поставки — працюємо вже 2 роки.", a:"Олександр, партнер HoReCa" },
+      { q:"Люблю ваші класичні рецепти без зайвих добавок.", a:"Ірина, Львів" }
+    ];
+    const quote = document.getElementById('quote');
+    const author = document.getElementById('author');
+    const dots = document.getElementById('dots');
+    let idx = 0;
+    function drawDots(){ dots.innerHTML = quotes.map((_,i)=>`<button data-i="${i}" class="${i===idx?'active':''}"></button>`).join('') }
+    function show(){ quote.textContent = quotes[idx].q; author.textContent = quotes[idx].a; drawDots(); }
+    dots.addEventListener('click',(e)=>{ const b = e.target.closest('button'); if(!b) return; idx = Number(b.dataset.i); show(); })
+    setInterval(()=>{ idx = (idx+1)%quotes.length; show(); }, 6000);
+    show();
+  </script>
+</body>
+</html>
