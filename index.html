@@ -21,16 +21,35 @@
     body{margin:0;font-family: ui-serif, Georgia, "Times New Roman", Times, serif;background:var(--bg);color:var(--ink);}
     img{max-width:100%;display:block}
     a{color:inherit;text-decoration:none}
+    button{font:inherit}
 
-    .topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+    /* ===== header ===== */
+    .topbar{position:sticky;top:0;z-index:80;background:#fff;border-bottom:1px solid var(--line)}
     .nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 20px}
     .brand{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px}
     .brand .emblem{width:56px;height:40px;border:1px solid var(--line);border-radius:4px;background:repeating-linear-gradient(135deg,#dcc9b3 0 12px,#f2e5d8 12px 24px);box-shadow:inset 0 0 0 2px #fff}
     .brand .title{font-weight:700;letter-spacing:2px;font-size:20px}
+
     .menu{display:flex;gap:18px}
     .menu a{padding:8px 6px;border-bottom:2px solid transparent}
     .menu a:hover{border-color:var(--sepia)}
 
+    /* burger */
+    .burger{display:none; width:44px;height:40px;border:1px solid var(--line);border-radius:8px;background:#fff;display:none;align-items:center;justify-content:center;cursor:pointer}
+    .burger span{display:block;width:20px;height:2px;background:#3b2f25;position:relative}
+    .burger span:before,.burger span:after{content:"";position:absolute;left:0;width:20px;height:2px;background:#3b2f25}
+    .burger span:before{top:-6px}
+    .burger span:after{top:6px}
+
+    /* mobile drawer */
+    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:90}
+    .backdrop.open{opacity:1;pointer-events:auto}
+    .mnav{position:fixed;top:0;right:-82vw;width:min(82vw,360px);height:100%;background:#fff;border-left:1px solid var(--line);box-shadow:var(--shadow);z-index:95;transition:right .25s ease;display:flex;flex-direction:column}
+    .mnav.open{right:0}
+    .mnav header{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--line)}
+    .mnav a{padding:14px 16px;border-bottom:1px solid var(--line)}
+
+    /* ===== hero ===== */
     .hero{position:relative;isolation:isolate}
     .hero img{width:100%;height:60vh;min-height:320px;object-fit:cover;display:block}
     .hero .overlay{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(1200px 300px at 50% 0%, rgba(255,255,255,.35), transparent 60%)}
@@ -38,8 +57,12 @@
     .hero .caption h1{margin:0 0 8px;font-size:32px}
     .hero .caption p{margin:0;font-size:16px}
 
+    /* ===== responsive ===== */
+    @media (max-width:900px){
+      .menu{display:none}
+      .burger{display:flex}
+    }
     @media (max-width:600px){
-      .menu{flex-wrap:wrap;gap:10px;font-size:14px}
       .hero img{height:40vh;min-height:220px}
       .hero .caption h1{font-size:22px}
       .hero .caption p{font-size:14px}
@@ -49,6 +72,7 @@
       .footer .grid{grid-template-columns:1fr}
     }
 
+    /* ===== sections ===== */
     .wrap{max-width:1200px;margin:0 auto;padding:32px 20px}
     .section-title{font-size:28px;text-align:center;margin:0 0 8px}
     .section-sub{color:var(--muted);text-align:center;margin:0 0 22px}
@@ -97,7 +121,7 @@
         <div class="emblem" aria-hidden="true"></div>
         <div class="title">CHÂTEAU</div>
       </div>
-      <div class="menu">
+      <div class="menu" aria-label="Головне меню">
         <a href="#home">Головна</a>
         <a href="#bakery">Наша пекарня</a>
         <a href="#geo">Ми в Україні</a>
@@ -105,8 +129,24 @@
         <a href="#news">Новини</a>
         <a href="#contacts">Контакти</a>
       </div>
+      <button class="burger" id="burger" aria-label="Відкрити меню" aria-controls="mnav" aria-expanded="false"><span></span></button>
     </nav>
   </header>
+
+  <!-- Mobile drawer -->
+  <div class="backdrop" id="backdrop" hidden></div>
+  <aside class="mnav" id="mnav" aria-hidden="true">
+    <header>
+      <strong style="letter-spacing:2px">CHÂTEAU</strong>
+      <button id="closeM" aria-label="Закрити меню" class="burger" style="width:40px;height:36px"><span></span></button>
+    </header>
+    <a href="#home">Головна</a>
+    <a href="#bakery">Наша пекарня</a>
+    <a href="#geo">Ми в Україні</a>
+    <a href="#products">Наша продукція</a>
+    <a href="#news">Новини</a>
+    <a href="#contacts">Контакти</a>
+  </aside>
 
   <!-- ===== ГЕРОЙ з GIF ===== -->
   <section id="home" class="hero">
@@ -213,10 +253,48 @@
   <a class="up" href="#home" title="Догори">↑</a>
 
   <script>
+    // ===== Mobile menu =====
+    const burger = document.getElementById('burger');
+    const mnav = document.getElementById('mnav');
+    const backdrop = document.getElementById('backdrop');
+    const closeM = document.getElementById('closeM');
+
+    function openMenu(){
+      mnav.classList.add('open');
+      backdrop.hidden = false; backdrop.classList.add('open');
+      burger.setAttribute('aria-expanded','true');
+      mnav.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeMenu(){
+      mnav.classList.remove('open');
+      backdrop.classList.remove('open'); setTimeout(()=>backdrop.hidden=true,200);
+      burger.setAttribute('aria-expanded','false');
+      mnav.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+
+    burger.addEventListener('click', openMenu);
+    backdrop.addEventListener('click', closeMenu);
+    closeM.addEventListener('click', closeMenu);
+    mnav.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+
+    // ===== Testimonials slider (simple) =====
     const quotes = [
       { q:"Після першого шматочка нашої випічки кожне свято стає ще теплішим. Дякуємо за якість!", a:"Марія, Київ" },
       { q:"Стабільна якість і пунктуальні поставки — працюємо вже 2 роки.", a:"Олександр, партнер HoReCa" },
       { q:"Люблю ваші класичні рецепти без зайвих добавок.", a:"Ірина, Львів" }
     ];
     const quote = document.getElementById('quote');
-    const author = document.getElementById('
+    const author = document.getElementById('author');
+    const dots = document.getElementById('dots');
+    let idx = 0;
+    function drawDots(){ dots.innerHTML = quotes.map((_,i)=>`<button data-i="${i}" style="width:8px;height:8px;border-radius:50%;border:1px solid #bfa48a;background:${i===idx?'#bfa48a':'#fff'};margin:0 4px"></button>`).join('') }
+    function show(){ quote.textContent = quotes[idx].q; author.textContent = quotes[idx].a; drawDots(); }
+    dots.addEventListener('click',(e)=>{ const b = e.target.closest('button'); if(!b) return; idx = Number(b.dataset.i); show(); })
+    setInterval(()=>{ idx = (idx+1)%quotes.length; show(); }, 6000);
+    show();
+  </script>
+</body>
+</html>
